@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ibeetl.bbs.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.beetl.sql.core.SQLManager;
 import org.beetl.sql.core.engine.PageQuery;
@@ -39,11 +40,6 @@ import com.ibeetl.bbs.es.annotation.EsIndexs;
 import com.ibeetl.bbs.es.annotation.EsOperateType;
 import com.ibeetl.bbs.es.service.EsService;
 import com.ibeetl.bbs.es.vo.IndexObject;
-import com.ibeetl.bbs.model.BbsMessage;
-import com.ibeetl.bbs.model.BbsPost;
-import com.ibeetl.bbs.model.BbsReply;
-import com.ibeetl.bbs.model.BbsTopic;
-import com.ibeetl.bbs.model.BbsUser;
 import com.ibeetl.bbs.service.BBSService;
 import com.ibeetl.bbs.service.BbsUserService;
 
@@ -96,7 +92,7 @@ public class BBSController {
 			view.addObject("topicPage", query);
 			view.addObject("pagename", "首页综合");
 		}else{
-			
+
 	    	//查询索引
 			PageQuery<IndexObject> searcherKeywordPage = this.esService.getQueryPage(keyword,p);
 			view.setViewName("/lucene/lucene.html");
@@ -116,7 +112,7 @@ public class BBSController {
 		view.addObject("list", list);
 		return view;
 	}
-	
+
 	@RequestMapping("/bbs/my/{p}.html")
 	public RedirectView  openMyTopic(@PathVariable int p,HttpServletRequest request, HttpServletResponse response){
 		BbsUser user = webUtils.currentUser(request, response);
@@ -162,7 +158,7 @@ public class BBSController {
 		PageQuery query = new PageQuery(p, new HashMap(){{put("topicId", id);}});
 		query = bbsService.getPosts(query);
 		view.addObject("postPage", query);
-		
+
 		BbsTopic topic = bbsService.getTopic(id);
 		BbsTopic template = new BbsTopic();
 		template.setId(id);
@@ -189,6 +185,12 @@ public class BBSController {
 	@RequestMapping("/bbs/topic/add.html")
 	public ModelAndView addTopic(ModelAndView view){
 		view.setViewName("/post.html");
+		return view;
+	}
+
+	@RequestMapping("/bbs/topic/addModule.html")
+	public ModelAndView addModule(ModelAndView view){
+		view.setViewName("/module.html");
 		return view;
 	}
 
@@ -235,7 +237,7 @@ public class BBSController {
 			topic.setContent(title);
 			post.setContent(postContent);
 			bbsService.saveTopic(topic, post, user);
-			
+
 			result.put("err", 0);
 			result.put("tid",topic.getId());
 			result.put("pid",post.getId());
@@ -243,6 +245,49 @@ public class BBSController {
 		}
 		return result;
 	}
+
+	@ResponseBody
+	@PostMapping("/bbs/topic/saveModule")
+//	@EsIndexs({
+//			@EsIndexType(entityType= EsEntityType.BbsTopic ,operateType = EsOperateType.ADD,key = "tid"),
+//			@EsIndexType(entityType= EsEntityType.BbsPost ,operateType = EsOperateType.ADD,key = "pid")
+//	})
+	public JSONObject saveModule(BbsModule module, String title, HttpServletRequest request, HttpServletResponse response){
+		//@TODO， 防止频繁提交
+		BbsUser user = webUtils.currentUser(request, response);
+		JSONObject result = new JSONObject();
+		result.put("err", 1);
+		if(user==null){
+			result.put("msg", "请先登录后再继续！");
+		}else if(title.length()<5){
+			//客户端需要完善
+			result.put("msg", "标题太短！");
+		}else{
+//			module.setId(6);
+			module.setName(title);
+//			bbsService.saveModule(module);
+//			module.setDetail("hhh");
+//			module.setTurn(6);
+			bbsService.saveModule(module);
+//			bbsService.saveTopic(topic, post, user);
+
+			result.put("err", 0);
+//			result.put("mid",module.getId());
+			result.put("msg", "/bbs/index");
+		}
+		return result;
+	}
+
+//	@RequestMapping("/bbs/topic/saveModule")
+//	public ModelAndView saveModule(String title,HttpServletRequest request){
+//		BbsModule module = new BbsModule();
+//		module.setName(title);
+////		module.setTurn(6);
+////		module.setDetail("hhh");
+////		module.setId(6);
+//		bbsService.saveModule(module);
+//		return new ModelAndView( "forward:/bbs/index/1.html");
+//	}
 
 	@ResponseBody
 	@RequestMapping("/bbs/post/save")
@@ -261,9 +306,9 @@ public class BBSController {
 			int totalPost = topic.getPostCount() + 1;
 			topic.setPostCount(totalPost);
 			bbsService.updateTopic(topic);
-			
+
 			bbsService.notifyParticipant(topic.getId(),user.getId());
-			
+
 			int pageSize = (int)PageQuery.DEFAULT_PAGE_SIZE;
 			int page = (totalPost/pageSize)+(totalPost%pageSize==0?0:1);
 			result.put("msg", "/bbs/topic/"+post.getTopicId()+"-"+page+".html");
@@ -273,7 +318,7 @@ public class BBSController {
 		return result;
 	}
 
-	
+
 	/**
 	 * 回复评论改为Ajax方式提升体验
 	 * @param reply
@@ -301,8 +346,8 @@ public class BBSController {
 			reply.setUser(user);
 			result.put("msg", "评论成功！");
 			result.put("err", 0);
-			
-			BbsTopic topic = bbsService.getTopic(reply.getTopicId());			
+
+			BbsTopic topic = bbsService.getTopic(reply.getTopicId());
 			bbsService.notifyParticipant(reply.getTopicId(),user.getId());
 			result.put("id",reply.getId());
 		}
@@ -317,7 +362,7 @@ public class BBSController {
 		return view;
 	}
 
-	
+
 	// ============== 上传文件路径：项目根目录 upload
 	@RequestMapping("/bbs/upload")
 	@ResponseBody
@@ -355,11 +400,11 @@ public class BBSController {
 		}
 		return map;
 	}
-	
+
 	@RequestMapping("/bbs/showPic/{path}.{ext}")
 	public void showPic(@PathVariable String path, @PathVariable String ext,HttpServletRequest request, HttpServletResponse response){
 		String rootPath = filePath;
-		
+
 		try {
 			String filePath = rootPath + "/upload/" + path+"."+ext;
 			FileInputStream fins = new FileInputStream(filePath);
@@ -373,7 +418,7 @@ public class BBSController {
 
 	// ======================= admin
 
-	
+
 	@ResponseBody
 	@PostMapping("/bbs/admin/topic/nice/{id}")
 	@EsIndexType(entityType= EsEntityType.BbsTopic ,operateType = EsOperateType.UPDATE)
@@ -393,7 +438,7 @@ public class BBSController {
 		}
 		return result;
 	}
-	
+
 	@ResponseBody
 	@PostMapping("/bbs/admin/topic/up/{id}")
 	@EsIndexType(entityType= EsEntityType.BbsTopic ,operateType = EsOperateType.UPDATE)
@@ -414,7 +459,7 @@ public class BBSController {
 		return result;
 	}
 
-	
+
 	@ResponseBody
 	@PostMapping("/bbs/admin/topic/delete/{id}")
 	@EsIndexType(entityType= EsEntityType.BbsTopic ,operateType = EsOperateType.DELETE)
@@ -506,12 +551,12 @@ public class BBSController {
 		return result;
 	}
 
-	
+
 	@ResponseBody
 	@PostMapping("/bbs/admin/reply/delete/{id}")
 	@EsIndexType(entityType= EsEntityType.BbsReply ,operateType = EsOperateType.DELETE)
 	public JSONObject deleteReply(HttpServletRequest request, HttpServletResponse response, @PathVariable int id){
-		
+
 		JSONObject result = new JSONObject();
 		if( canDeleteReply(request, response, id)){
 			bbsService.deleteReplay(id);
@@ -523,9 +568,9 @@ public class BBSController {
 		}
 		return result;
 	}
-	
+
 	private boolean canDeleteReply(HttpServletRequest request, HttpServletResponse response,Integer replyId){
-		
+
 		BbsUser user = this.webUtils.currentUser(request, response);
 		BbsReply reply = bbsService.getReply(replyId);
 		if(reply.getUserId().equals(user.getId())){
@@ -535,12 +580,12 @@ public class BBSController {
 		if(user.getUserName().equals("admin")){
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	private boolean canUpdatePost(BbsPost post,HttpServletRequest request, HttpServletResponse response){
-		
+
 		BbsUser user = this.webUtils.currentUser(request, response);
 		if(post.getUserId().equals(user.getId())){
 			return true ;
@@ -549,10 +594,10 @@ public class BBSController {
 		if(user.getUserName().equals("admin")){
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * 初始化索引
 	 * @param request
@@ -593,7 +638,7 @@ public class BBSController {
 			result.put("msg", "未登录用户！");
 		}else{
 			BbsPost post = bbsService.getPost(postId);
-			
+
 			Cache cache = cacheManager.getCache("postSupport");
 			ValueWrapper valueWrapper = cache.get(user.getId()+":"+post.getId());
 			if(valueWrapper != null && valueWrapper.get() != null) {
@@ -610,7 +655,7 @@ public class BBSController {
 					result.put("data", post.getPros());
 				}
 				bbsService.updatePost(post);
-				
+
 				result.put("id", post.getId());
 				result.put("err", 0);
 				cache.put(user.getId()+":"+post.getId(), 1);
@@ -637,7 +682,7 @@ public class BBSController {
 			result.put("err", 1);
 			result.put("msg", "无法操作");
 		}else{
-			
+
 			post.setIsAccept((post.getIsAccept() == null || post.getIsAccept() == 0 )?1:0 );
 			result.put("data", post.getIsAccept());
 			bbsService.updatePost(post);

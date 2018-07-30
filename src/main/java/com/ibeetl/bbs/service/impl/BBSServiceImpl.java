@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ibeetl.bbs.model.*;
 import org.beetl.sql.core.SQLManager;
 import org.beetl.sql.core.engine.PageQuery;
 import org.beetl.sql.core.query.Query;
@@ -21,11 +22,6 @@ import com.ibeetl.bbs.dao.BbsPostDao;
 import com.ibeetl.bbs.dao.BbsReplyDao;
 import com.ibeetl.bbs.dao.BbsTopicDao;
 import com.ibeetl.bbs.dao.BbsUserDao;
-import com.ibeetl.bbs.model.BbsMessage;
-import com.ibeetl.bbs.model.BbsPost;
-import com.ibeetl.bbs.model.BbsReply;
-import com.ibeetl.bbs.model.BbsTopic;
-import com.ibeetl.bbs.model.BbsUser;
 import com.ibeetl.bbs.service.BBSService;
 import com.ibeetl.bbs.service.BbsUserService;
 
@@ -190,8 +186,16 @@ public class BBSServiceImpl implements BBSService {
 		postDao.insert(post,true);
 		gitUserService.addTopicScore(user.getId());
 	}
-	
-	
+
+
+	@Override
+//	@CacheEvict(cacheNames = {"bbsPost","bbsPostPage","bbsFirstPost","bbsLatestPost"}, allEntries=true)
+	public void saveModule(BbsModule module) {
+//		module.setName(title);
+		moduleDao.insert(module,true);
+//		gitUserService.addPostScore(user.getId());
+	}
+
 
 	@Override
 	@CacheEvict(cacheNames = {"bbsPost","bbsPostPage","bbsFirstPost","bbsLatestPost"}, allEntries=true)

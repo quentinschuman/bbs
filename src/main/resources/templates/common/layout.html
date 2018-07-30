@@ -6,7 +6,7 @@
     <title>能力开放平台论坛</title>
     <meta name="keywords" content="Beetl,BeetlSql">
     <meta name="description" content="论坛模板">
-    <link rel="shortcut icon" href="${ctxPath}/static/img/favicon.ico">
+    <link rel="shortcut icon" href="${ctxPath}/static/images/favicon.ico">
 <!-- 	<link href="${ctxPath}/css/bootstrap.min.css" rel="stylesheet"> -->
 	<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -21,7 +21,7 @@
     	.navbar-brand>svg{width: 24px;vertical-align: middle;fill:#000;}
     	.mcount{background-color: orange;position: relative;top: -1px;}
 
-   		.navbar-default{background: #ffce3d;border-color:#fff;}
+   		.navbar-default{background: #22a486;border-color:#fff;}
    		.navbar-default .navbar-brand , .navbar-default .navbar-nav>li>a{color: #000;}
    		.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover{ color: #000;}
    		.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {color: #000; background-color: #ffbf00;}
@@ -106,6 +106,7 @@
 						<li><a href="javascript:;">等级：${level(_user.level)}</a></li>
 						@if(isAdmin){
 							<li><a href="javascript:;" id="initEs" data-href="${ctxPath}/bbs/admin/es/init">初始化ES索引</a></li>
+							<li><a href="/bbs/bbs/topic/addModule.html"><i class="fa fa-plus"></i> 新增板块</a></li>
 						@}
 						<li class="divider"></li>
 						<li><a href="${ctxPath}/bbs/myMessage.html">给我的回复</a></li>
@@ -127,10 +128,10 @@
 		</div>
 		<div class="col-sm-3 content-right">
 			<div class="author-panel hidden-xs">
-				<div class="ad-box" style="background: url(/bbs/images/pic_gg.png)">
-					<p class="text-title">公告</p>
-					<p class="text-info" style="margin-right:0;">Notice</p>
-				</div>
+				<!--<div class="ad-box" style="background: url(/bbs/images/pic_gg.png)">-->
+					<!--<p class="text-title">公告</p>-->
+					<!--<p class="text-info" style="margin-right:0;">Notice</p>-->
+				<!--</div>-->
 				<div class="gg-content">
 					<div class="gg-content-top">
 						<div class="gg-wrap">
@@ -143,7 +144,7 @@
 						<p class="gg-info">管理员将在5个工作日内给您答复</p>
 					</div>
 					<div class="gg-content-bottom">
-						<p class="url-title">能力开放平台官网</p>
+						<p class="url-title">欢迎访问能力开放平台官网</p>
 						<p class="url"><a href="https://open8200.hikvision.com/artemis-portal/index?version=4"
 										  target="_blank">https://open8200.hikvision.com/artemis-portal/index?version=4</a>
 						</p>
@@ -151,44 +152,6 @@
 				</div>
 			</div>
 		</div>
-		<!--<div class="head"></div>-->
-		<!--<div class="name">作者：闲.大赋</div>-->
-		<!--<div class="home">-->
-		<!--官网：-->
-		<!--<a href="http://ibeetl.com" target="_Blank"><i class="fa fa-home"></i></a>-->
-		<!--</div>-->
-		<!--<div class="blogs">-->
-		<!--博客：-->
-		<!--<a href="https://my.oschina.net/xiandafu" target="_Blank">开源中国</a>-->
-		<!--<a href="http://git.oschina.net/xiandafu" target="_Blank">码云</a>-->
-		<!--<a href="https://github.com/javamonkey" target="_Blank">GitHub</a>-->
-		<!--</div>-->
-		<!--<div class="projects">-->
-		<!--作品一：-->
-		<!--<a href="http://ibeetl.com/guide/#beetl" target="_Blank">Beetl</a>-->
-		<!--<a href="http://ibeetl.com/guide/#beetlsql" target="_Blank">BeetlSql</a>-->
-		<!---->
-		<!--</div>-->
-		<!--<div class="projects">-->
-		<!--作品二：-->
-		<!--<a href="https://git.oschina.net/xiandafu/beetl-bbs" target="_Blank">本论坛源码:Beetl-BBS</a>-->
-		<!---->
-		<!--</div>-->
-		<!--<div class="projects">-->
-		<!--作品三：-->
-		<!--<a href="gitee.com/xiandafu/springboot-plus" target="_Blank">Spring Boot 2 plus</a>-->
-		<!---->
-		<!--</div>-->
-		<!--<div class="QQ">qq群：219324263</div>-->
-		<!--<div class="help">-->
-		<!---->
-
-		<!--<div>-->
-		<!--<b>微信捐助开源</b>：	-->
-		<!--<img src="${ctxPath}/images/weixinpay.png" width="100%">-->
-		<!---->
-		<!--</div>-->
-		<!--</div>-->
 	</div>
 </div>
 
