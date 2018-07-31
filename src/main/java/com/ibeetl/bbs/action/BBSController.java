@@ -252,7 +252,7 @@ public class BBSController {
 //			@EsIndexType(entityType= EsEntityType.BbsTopic ,operateType = EsOperateType.ADD,key = "tid"),
 //			@EsIndexType(entityType= EsEntityType.BbsPost ,operateType = EsOperateType.ADD,key = "pid")
 //	})
-	public JSONObject saveModule(BbsModule module, String title, HttpServletRequest request, HttpServletResponse response){
+	public JSONObject saveModule(BbsModule module, String title, String detail, HttpServletRequest request, HttpServletResponse response){
 		//@TODO， 防止频繁提交
 		BbsUser user = webUtils.currentUser(request, response);
 		JSONObject result = new JSONObject();
@@ -264,6 +264,7 @@ public class BBSController {
 			result.put("msg", "标题太短！");
 		}else{
 //			module.setId(6);
+			module.setDetail(detail);
 			module.setName(title);
 //			bbsService.saveModule(module);
 //			module.setDetail("hhh");
