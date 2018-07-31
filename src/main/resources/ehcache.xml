@@ -25,6 +25,12 @@
 	    timeToLiveSeconds="1800" 
 	    overflowToDisk="false"
 		/>
+	<cache name="bbsModule"
+		   eternal="false"
+		   timeToIdleSeconds="0"
+		   timeToLiveSeconds="1800"
+		   overflowToDisk="false"
+	/>
     <cache name="bbsReply" 
 	    eternal="false" 
 	    timeToIdleSeconds="0" 

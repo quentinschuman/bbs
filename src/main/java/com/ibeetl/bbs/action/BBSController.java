@@ -246,6 +246,15 @@ public class BBSController {
 		return result;
 	}
 
+	/**
+	 * admin账户新增板块
+	 * @param module
+	 * @param title
+	 * @param detail
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("/bbs/topic/saveModule")
 //	@EsIndexs({
@@ -263,14 +272,9 @@ public class BBSController {
 			//客户端需要完善
 			result.put("msg", "标题太短！");
 		}else{
-//			module.setId(6);
 			module.setDetail(detail);
 			module.setName(title);
-//			bbsService.saveModule(module);
-//			module.setDetail("hhh");
-//			module.setTurn(6);
 			bbsService.saveModule(module);
-//			bbsService.saveTopic(topic, post, user);
 
 			result.put("err", 0);
 //			result.put("mid",module.getId());

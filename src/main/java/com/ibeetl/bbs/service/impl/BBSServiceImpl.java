@@ -189,11 +189,9 @@ public class BBSServiceImpl implements BBSService {
 
 
 	@Override
-//	@CacheEvict(cacheNames = {"bbsPost","bbsPostPage","bbsFirstPost","bbsLatestPost"}, allEntries=true)
+	@CacheEvict(cacheNames = {"bbsModule"}, allEntries=true)
 	public void saveModule(BbsModule module) {
-//		module.setName(title);
 		moduleDao.insert(module,true);
-//		gitUserService.addPostScore(user.getId());
 	}
 
 
